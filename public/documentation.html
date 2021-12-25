@@ -21,6 +21,7 @@
         <th>Request</th>
         <th>URL</th>
         <th>HTTP method</th>
+        <th>Query parameter</th>
         <th>Request body data format</th>
         <th>Response body data format</th>
         </tr></thead>
@@ -29,6 +30,7 @@
             <td>Return a list of ALL movies to the user</td>
             <td>/movies</td>
             <td>GET</td>
+            <td>N/A</td>
             <td>none</td>
             <td>A JSON object holding data about all the movies</td>
         </tr>
@@ -36,16 +38,17 @@
             <td>Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title</td>
             <td>/movies/[title]</td>
             <td>GET</td>
+            <td>:title</td>
             <td>None</td>
             <td>A JSON object holding data
                 about a single movie, like so:,<br>
                <small> {<br>
-                title: 'Pulp Fiction',<br>
-                description: 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',<br>
-                year: 1994, <br>
-                genres: [crime, drama],<br>
-                director: 'Quentin Tarantino',<br>
-                imageURL: '', <br>
+                <b>title:</b> 'Pulp Fiction',<br>
+                <b>Description:</b> 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',<br>
+                <b>Year:</b> 1994, <br>
+                <b>Genres:</b> [crime, drama],<br>
+                <b>Director:</b> 'Quentin Tarantino',<br>
+                <b>imageURL:</b> '', <br>
                 }</small><br>
                 </td>
         </tr>
@@ -53,49 +56,50 @@
             <td>Return data about a genre (description) by name/title</td>
             <td>/movies/genres/[name]</td>
             <td>GET</td>
+            <td>:name</td>
             <td>None</td>
             <td>A JSON object holding data about the specified genre, like so<br>
                 <small>
                 {<br>
-                name: 'Science fiction (scifi)',<br>
-                description: 'Science fiction (once known as scientific romance) is similar to fantasy, except stories in this genre use scientific understanding to explain the universe that it takes place in. It generally includes or is centered on the presumed effects or ramifications of computers or machines; travel through space, time or alternate universes; alien life-forms; genetic engineering; or other such things. The science or technology used may or may not be very thoroughly elaborated on.',<br>
-                sub-genres: 'Cyberpunk'<br>
+                <b>Name:</b> 'Science fiction (scifi)',<br>
+                <b>Description:</b> 'Science fiction (once known as scientific romance) is similar to fantasy, except stories in this genre use scientific understanding to explain the universe that it takes place in. It generally includes or is centered on the presumed effects or ramifications of computers or machines; travel through space, time or alternate universes; alien life-forms; genetic engineering; or other such things. The science or technology used may or may not be very thoroughly elaborated on.',<br>
+                <b>subGenres:</b> 'Cyberpunk'<br>
                 }</small></td>
         </tr>
         <tr>
             <td>Return data about a director (bio, birth year, death year) by name</td>
             <td>/directors/[name]</td>
             <td>GET</td>
+            <td>:name</td>
             <td>None</td>
             <td>A JSON object holding data about the specified director, like so<br> 
                 <small>{<br>
-                name: 'Science fiction (scifi)',<br>
-                born in: 'March 27, 1963'<br>
-                place of birth: 'Knoxville, Tennessee, USA'<br>
-                death year: null<br>
-                short-bio: 'Quentin Jerome Tarantino[2] (/ˌtærənˈtiːnoʊ/; born March 27, 1963)[3] is an American film director, screenwriter, producer, film critic, and actor. His films are characterized by nonlinear storylines, dark humor, stylized violence, extended dialogue, ensemble casts, references to popular culture, alternate history, and neo-noir.'<br>
+                <b>name:</b> 'Quentin Tarantino',<br>
+                <b>bornDate:</b> 'March 27, 1963',<br>
+                <b>placeOfBirth:</b> 'Knoxville, Tennessee, USA',<br>
+                <b>deathYear:</b> null,<br>
+                <b>shortBio:</b> 'Quentin Jerome Tarantino[2] (/ˌtærənˈtiːnoʊ/; born March 27, 1963)[3] is an American film director, screenwriter, producer, film critic, and actor. His films are characterized by nonlinear storylines, dark humor, stylized violence, extended dialogue, ensemble casts, references to popular culture, alternate history, and neo-noir.'<br>
                 }</small></td>
         </tr>
         <tr>
             <td>Allow new users to register</td>
             <td>/users/new</td>
             <td>POST</td>
+            <td>N/A</td>
             <td>A JSON object holding data about the user, like so<br> 
             <small> {<br>
-                    username: 'valentina',<br>
-                    e-mail address: 'valentinavaccari@hotmail.com',<br>
-                    first name: 'valentina',<br>
-                    last name: 'vaccari',<br>
-                    password: 'valentina1',<br>
-                    favourites: [],<br>
+                    <b>username:</b> 'valentina',<br>
+                        <b>e-mail:</b> 'valentinavaccari@hotmail.com',<br>
+                                        <b>favourites:</b> [],<br>
                 }</small>
             </td>
             <td>A JSON object holding the data entered by the user, plus the user's ID</td>
         </tr>
         <tr>
             <td>Allow users to update their user info (username)</td>
-            <td>/users/[username]/[favourite movies][New-username]</td>
-            <td>PATCH</td>
+            <td>/users/[username]/[New-username]</td>
+            <td>PUT</td>
+            <td>:usernasme/:newusername</td>
             <td>none</td>
             <td>A text message indicating that the new username was successfully updated
                 </td>
@@ -104,21 +108,24 @@
             <td>Allow users to add a movie to their list of favorites (showing only a text that a movie has been added)</td>
             <td>/users/[username]/[favourites]/[new-movietitle]</td>
             <td>POST</td>
+            <td>:username/favourites/:title</td>
             <td>none</td>
             <td>A text message indicating whether the movie was successfully added to the list of favourites
                 </td>
         </tr>
         <tr>
             <td>Allow users to remove a movie from their list of favorites (showing only a text that a movie has been removed)</td>
-            <td>DELETE</td>
             <td>/users/[username]/[favourites]/[movietitle-to-remove]</td>
-            <td></td>
+            <td>DELETE</td>
+            <td>:username/favourites/:title</td>
+            <td>none</td>
             <td>A text message indicating whether the movie was successfully removed from the list of favourites</td>
         </tr>
         <tr>
             <td>Allow existing users to deregister (showing only a text that a user email has been removed)</td>
             <td>/users/[username]</td>
             <td>DELETE</td>
+            <td>:username</td>
             <td>none</td>
             <td>A text message confirming that the user email was deregistered</td>
         </tr></tbody>
