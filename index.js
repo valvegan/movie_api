@@ -12,7 +12,7 @@ let movies = [
     {
       title: 'Pulp Fiction',
       description: 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',
-      genres: [crime, drama],
+      genres: ['Crime', 'Drama'],
       director: 'Quentin Tarantino',
       year: 1994,
       URL: 'https://upload.wikimedia.org/wikipedia/en/3/3b/Pulp_Fiction_%281994%29_poster.jpg', 
@@ -178,34 +178,3 @@ app.put('/users/:username/favourites/:title', (req, res) => {
     console.log('Your app is listening on port 8080.');
   });
   
-  
-  
-
-
-
-
-// Gets the GPA of a student
-app.get('/students/:name/gpa', (req, res) => {
-  let student = students.find((student) => { return student.name === req.params.name });
-
-  if (student) {
-    let classesGrades = Object.values(student.classes); // Object.values() filters out object's keys and keeps the values that are returned as a new array
-    let sumOfGrades = 0;
-    classesGrades.forEach(grade => {
-      sumOfGrades = sumOfGrades + grade;
-    });
-
-    let gpa = sumOfGrades / classesGrades.length;
-    console.log(sumOfGrades);
-    console.log(classesGrades.length);
-    console.log(gpa);
-    res.status(201).send('' + gpa);
-    //res.status(201).send(gpa);
-  } else {
-    res.status(404).send('Student with the name ' + req.params.name + ' was not found.');
-  }
-});
-
-app.listen(8080, () => {
-  console.log('Your app is listening on port 8080');
-});
