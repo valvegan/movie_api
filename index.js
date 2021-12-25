@@ -155,16 +155,17 @@ app.put('/users/:username/favorites/:title', (req, res) => {
   let user = users.find((user) => { return user.username === req.params.username });
   let movie = movies.find((movie) => { return movie.title === req.params.title });
   let favorites = user.favorites;
-  if (user.favorites === undefined){
-    res.status(404).send('there are no favorites yet');
-  };
+  
   if (movie && !favorites.includes(movie)) {
     user.favorites.push(movie);
     res.status(201).send(req.params.title + ' was added to your list of favourite movies');
   } else {
     res.status(404).send(req.params.title + ' was not found in the list of movies');
   }
-});
+}); //post and put requests finished
+
+
+  //delete requests 
   //remove movie from a favourite list
   app.delete('/users/:username/favorites/:title', (req, res) => {
     let user = users.find((user) => { return user.name === req.params.username });
@@ -178,12 +179,9 @@ app.put('/users/:username/favorites/:title', (req, res) => {
       res.status(404).send(req.params.title + ' was not found in your list of favourite movies');
     }
   });
-  //post and put requests finished
-
-  //delete requests 
   //de-register user
   app.delete('/users/:username', (req, res) => {
-  let user = users.find((user) => { return user.name === req.params.username });
+  let user = users.find((user) => { return user.username === req.params.username });
   if (user) {
     users = users.filter((obj) => { return obj.username !== req.params.username });
     res.status(201).send('User ' + req.params.username + ' with email ' + user.email + ' was deleted.');
