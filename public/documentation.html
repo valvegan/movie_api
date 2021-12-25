@@ -5,9 +5,123 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DOCUMENTATION</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="docstyle.css">
+    
 </head>
 <body>
+    <header>
     <h1>Documentation Page</h1>
-    <h2>Project: My movie-List</h2>
+    <h2>Project: My movie-List</h2></header>
+    <table>
+        <thead>
+        <tr>
+        <th>Request</th>
+        <th>URL</th>
+        <th>HTTP method</th>
+        <th>Request body data format</th>
+        <th>Response body data format</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+            <td>Return a list of ALL movies to the user</td>
+            <td>/movies</td>
+            <td>GET</td>
+            <td>none</td>
+            <td>A JSON object holding data about all the movies</td>
+        </tr>
+        <tr>
+            <td>Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title</td>
+            <td>/movies/[title]</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A JSON object holding data
+                about a single movie, like so:,<br>
+               <small> {<br>
+                title: 'Pulp Fiction',<br>
+                description: 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',<br>
+                year: 1994, <br>
+                genres: [crime, drama],<br>
+                director: 'Quentin Tarantino',<br>
+                imageURL: '', <br>
+                }</small><br>
+                </td>
+        </tr>
+        <tr>
+            <td>Return data about a genre (description) by name/title</td>
+            <td>/movies/genres/[name]</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A JSON object holding data about the specified genre, like so<br>
+                <small>
+                {<br>
+                name: 'Science fiction (scifi)',<br>
+                description: 'Science fiction (once known as scientific romance) is similar to fantasy, except stories in this genre use scientific understanding to explain the universe that it takes place in. It generally includes or is centered on the presumed effects or ramifications of computers or machines; travel through space, time or alternate universes; alien life-forms; genetic engineering; or other such things. The science or technology used may or may not be very thoroughly elaborated on.',<br>
+                sub-genres: 'Cyberpunk'<br>
+                }</small></td>
+        </tr>
+        <tr>
+            <td>Return data about a director (bio, birth year, death year) by name</td>
+            <td>/directors/[name]</td>
+            <td>GET</td>
+            <td>None</td>
+            <td>A JSON object holding data about the specified director, like so<br> 
+                <small>{<br>
+                name: 'Science fiction (scifi)',<br>
+                born in: 'March 27, 1963'<br>
+                place of birth: 'Knoxville, Tennessee, USA'<br>
+                death year: null<br>
+                short-bio: 'Quentin Jerome Tarantino[2] (/ˌtærənˈtiːnoʊ/; born March 27, 1963)[3] is an American film director, screenwriter, producer, film critic, and actor. His films are characterized by nonlinear storylines, dark humor, stylized violence, extended dialogue, ensemble casts, references to popular culture, alternate history, and neo-noir.'<br>
+                }</small></td>
+        </tr>
+        <tr>
+            <td>Allow new users to register</td>
+            <td>/users/new</td>
+            <td>POST</td>
+            <td>A JSON object holding data about the user, like so<br> 
+            <small> {<br>
+                    username: 'valentina',<br>
+                    e-mail address: 'valentinavaccari@hotmail.com',<br>
+                    first name: 'valentina',<br>
+                    last name: 'vaccari',<br>
+                    password: 'valentina1',<br>
+                    favourites: [],<br>
+                }</small>
+            </td>
+            <td>A JSON object holding the data entered by the user, plus the user's ID</td>
+        </tr>
+        <tr>
+            <td>Allow users to update their user info (username)</td>
+            <td>/users/[username]/[favourite movies][New-username]</td>
+            <td>PATCH</td>
+            <td>none</td>
+            <td>A text message indicating that the new username was successfully updated
+                </td>
+        </tr>
+        <tr>
+            <td>Allow users to add a movie to their list of favorites (showing only a text that a movie has been added)</td>
+            <td>/users/[username]/[favourites]/[new-movietitle]</td>
+            <td>POST</td>
+            <td>none</td>
+            <td>A text message indicating whether the movie was successfully added to the list of favourites
+                </td>
+        </tr>
+        <tr>
+            <td>Allow users to remove a movie from their list of favorites (showing only a text that a movie has been removed)</td>
+            <td>DELETE</td>
+            <td>/users/[username]/[favourites]/[movietitle-to-remove]</td>
+            <td></td>
+            <td>A text message indicating whether the movie was successfully removed from the list of favourites</td>
+        </tr>
+        <tr>
+            <td>Allow existing users to deregister (showing only a text that a user email has been removed)</td>
+            <td>/users/[username]</td>
+            <td>DELETE</td>
+            <td>none</td>
+            <td>A text message confirming that the user email was deregistered</td>
+        </tr></tbody>
+    </table>
 </body>
 </html>

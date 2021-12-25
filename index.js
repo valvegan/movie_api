@@ -7,6 +7,11 @@ app.use(morgan('common'));
 let topMovies = [
     {
       title: 'Pulp Fiction',
+      description: '',
+      genre: '',
+      director: '',
+      URL: '', 
+
     },
     {
       title: 'Donnie Darko',
