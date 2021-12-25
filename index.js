@@ -20,15 +20,39 @@ let movies = [
     },
     {
       title: 'Donnie Darko',
+      description: 'After narrowly escaping a bizarre accident, a troubled teenager is plagued by visions of a man in a large rabbit suit who manipulates him to commit a series of crimes.',
+      genres: ['Drama', 'Mistery', 'Sci-fi', 'Thriller'],
+      director: 'Richard Kelly',
+      year: 2001,
+      URL: '', 
+
     },
     {
       title: 'Pretty Woman',
+      description: 'A man in a legal but hurtful business needs an escort for some social events, and hires a beautiful prostitute he meets... only to fall in love.',
+      genres: ['Comedy', 'Romance'],
+      director: 'Garry Marshall',
+      year: 1990,
+      URL: '', 
+
     },
     {
       title: 'Spirited Away',
+      description: "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.",
+      genres: ['Animation', 'Adventure', 'Family', 'Fantasy', 'Mistery'],
+      director: 'Hayao Miyazaki',
+      year: 2001,
+      URL: '', 
+
     },
     {
-        title: 'Memento',
+      title: 'Memento',
+      description: "A man with short-term memory loss attempts to track down his wife's murderer.",
+      genres: ['Mystery', 'Thriller'],
+      director: 'Christopher Nolan',
+      year: 2000,
+      URL: 'https://upload.wikimedia.org/wikipedia/en/3/3b/Pulp_Fiction_%281994%29_poster.jpg', 
+
     },
     {
         title: 'Good Will Hunting',
@@ -83,20 +107,20 @@ let movies = [
   
   //get data about a single movie (by title)
   app.get('/movies/:title', (req, res) => {
-    res.json(movies.find((title) =>
-      { return movies.title === req.params.title }));
+    res.json(movies.find((movie) =>
+      { return movie.title === req.params.title }));
   });
 
   //get data about a genre (by genre name)
   app.get('/genres/:name', (req, res) => {
-    res.json(genres.find((name) =>
-      { return genres.name === req.params.name }));
+    res.json(genres.find((genre) =>
+      { return genre.name === req.params.name }));
   });
 
   //get data about a director (by name)
   app.get('/directors/:name', (req, res) => {
-    res.json(directors.find((name) =>
-      { return directors.name === req.params.name }));
+    res.json(directors.find((director) =>
+      { return director.name === req.params.name }));
   });
   //get requests finished
 
@@ -104,14 +128,10 @@ let movies = [
   //allow users to register
   app.post('/users/new', (req, res) => {
     let newUser = req.body;
-    const fields = 'The following are required fields: "username", "email", and "favorites"'
-    if (!newUser.name) {
-      const message = 'Missing a username in the request body';
-      res.status(400).send(fields + message);
-    } if (!email){
-      const message = 'Missing email in the request body';
-      res.status(400).send(fields + message);
-    }
+    if (!newUser.username || !newUser.email) {
+      const message = 'The following are required fields: "username", "email", and "favorites"';
+      res.status(400).send(message)}
+    
     //to check : not sure if conditional for lacking "favorites" field needs to be added 
     else {
       newUser.id = uuid.v4();
@@ -121,20 +141,23 @@ let movies = [
   });
   //update user info (username)
   app.put('/users/:username/:newusername', (req, res) => {
-  let user = users.find((user) => { return user.name === req.params.username });
+  let user = users.find((user) => { return user.username === req.params.username });
   if (user) {
     //replace the name with the new one
-    user.name = req.params.newusername 
+    user.username = req.params.newusername 
     res.status(201).send('User ' + req.params.username + ' was replaced with the following username: ' + req.params.newusername);
   } else {
     res.status(404).send('User ' + req.params.username + ' was not found.');
   }
 });
   //add a movie to a favourite list 
-app.put('/users/:username/favourites/:title', (req, res) => {
-  let user = users.find((user) => { return user.name === req.params.username });
+app.put('/users/:username/favorites/:title', (req, res) => {
+  let user = users.find((user) => { return user.username === req.params.username });
   let movie = movies.find((movie) => { return movie.title === req.params.title });
-  let favorites = users.favorites
+  let favorites = user.favorites;
+  if (user.favorites === undefined){
+    res.status(404).send('there are no favorites yet');
+  };
   if (movie && !favorites.includes(movie)) {
     user.favorites.push(movie);
     res.status(201).send(req.params.title + ' was added to your list of favourite movies');
@@ -143,7 +166,7 @@ app.put('/users/:username/favourites/:title', (req, res) => {
   }
 });
   //remove movie from a favourite list
-  app.delete('/users/:username/favourites/:title', (req, res) => {
+  app.delete('/users/:username/favorites/:title', (req, res) => {
     let user = users.find((user) => { return user.name === req.params.username });
     let movie = movies.find((movie) => { return movie.title === req.params.title });
     let favorites = users.favorites 
