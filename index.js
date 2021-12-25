@@ -45,7 +45,7 @@ let topMovies = [
     res.send('Welcome to my movie API! (myFlix app)');
   });
   //express.static
-  app.use('/staticFiles', express.static('public'));
+  app.use(express.static('public'));
   
   //error handling
   app.use((err, req, res, next) => {
