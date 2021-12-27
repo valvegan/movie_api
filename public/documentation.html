@@ -90,7 +90,7 @@
             <small> {<br>
                     <b>username:</b> 'valentina',<br>
                         <b>e-mail:</b> 'valentinavaccari@hotmail.com',<br>
-                                        <b>favourites:</b> [],<br>
+                                        <b>favorites:</b> [],<br>
                 }</small>
             </td>
             <td>A JSON object holding the data entered by the user, plus the user's ID</td>
@@ -106,9 +106,9 @@
         </tr>
         <tr>
             <td>Allow users to add a movie to their list of favorites (showing only a text that a movie has been added)</td>
-            <td>/users/[username]/[favourites]/[new-movietitle]</td>
+            <td>/users/[username]/[favorites]/[new-movietitle]</td>
             <td>POST</td>
-            <td>:username/favourites/:title</td>
+            <td>:username/favorites/:title</td>
             <td>none</td>
             <td>A text message indicating whether the movie was successfully added to the list of favourites
                 </td>
@@ -117,7 +117,7 @@
             <td>Allow users to remove a movie from their list of favorites (showing only a text that a movie has been removed)</td>
             <td>/users/[username]/[favourites]/[movietitle-to-remove]</td>
             <td>DELETE</td>
-            <td>:username/favourites/:title</td>
+            <td>:username/favorites/:title</td>
             <td>none</td>
             <td>A text message indicating whether the movie was successfully removed from the list of favourites</td>
         </tr>
