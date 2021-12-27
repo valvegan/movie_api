@@ -1,191 +1,206 @@
 const express = require('express'),
   bodyParser = require('body-parser'),
   morgan = require('morgan');
+const res = require('express/lib/response');
   uuid = require('uuid');
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('common'));
 
-//movie list
-let movies = [
-    {
-      title: 'Pulp Fiction',
-      description: 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',
-      genres: ['Crime', 'Drama'],
-      director: 'Quentin Tarantino',
-      year: 1994,
-      URL: 'https://upload.wikimedia.org/wikipedia/en/3/3b/Pulp_Fiction_%281994%29_poster.jpg', 
+const mongoose = require('mongoose');
+const Models = require('./models.js');
+const Movies = Models.Movie;
+const Users = Models.User;
 
-    },
-    {
-      title: 'Donnie Darko',
-      description: 'After narrowly escaping a bizarre accident, a troubled teenager is plagued by visions of a man in a large rabbit suit who manipulates him to commit a series of crimes.',
-      genres: ['Drama', 'Mistery', 'Sci-fi', 'Thriller'],
-      director: 'Richard Kelly',
-      year: 2001,
-      URL: '', 
+let Movie = mongoose.model('Movie', movieSchema);
+let User = mongoose.model('User', userSchema);
 
-    },
-    {
-      title: 'Pretty Woman',
-      description: 'A man in a legal but hurtful business needs an escort for some social events, and hires a beautiful prostitute he meets... only to fall in love.',
-      genres: ['Comedy', 'Romance'],
-      director: 'Garry Marshall',
-      year: 1990,
-      URL: '', 
-
-    },
-    {
-      title: 'Spirited Away',
-      description: "During her family's move to the suburbs, a sullen 10-year-old girl wanders into a world ruled by gods, witches, and spirits, and where humans are changed into beasts.",
-      genres: ['Animation', 'Adventure', 'Family', 'Fantasy', 'Mistery'],
-      director: 'Hayao Miyazaki',
-      year: 2001,
-      URL: '', 
-
-    },
-    {
-      title: 'Memento',
-      description: "A man with short-term memory loss attempts to track down his wife's murderer.",
-      genres: ['Mystery', 'Thriller'],
-      director: 'Christopher Nolan',
-      year: 2000,
-      URL: 'https://upload.wikimedia.org/wikipedia/en/3/3b/Pulp_Fiction_%281994%29_poster.jpg', 
-
-    },
-    {
-        title: 'Good Will Hunting',
-    },
-    {
-        title: 'The Silence of the Lambs',
-    },
-    {
-        title: 'Django Unchained',
-    },
-    {
-        title: 'The Shining',
-    },
-    {
-        title: 'Call me by your name',
-    }
-  ];
-  
-  //directors 
-  let directors = [
-    {
-      name: 'Quentin Tarantino',
-      bornDate: 'March 27, 1963',
-      placeOfBirth: 'Knoxville, Tennessee, USA',
-      deathYear: null,
-      shortBio: 'Quentin Jerome Tarantino[2] (/ˌtærənˈtiːnoʊ/; born March 27, 1963)[3] is an American film director, screenwriter, producer, film critic, and actor. His films are characterized by nonlinear storylines, dark humor, stylized violence, extended dialogue, ensemble casts, references to popular culture, alternate history, and neo-noir.'
-      }
-  ];
-  //genres
-  let genres = [
-    {
-      name: 'Science fiction (scifi)',
-      description: 'Science fiction (once known as scientific romance) is similar to fantasy, except stories in this genre use scientific understanding to explain the universe that it takes place in. It generally includes or is centered on the presumed effects or ramifications of computers or machines; travel through space, time or alternate universes; alien life-forms; genetic engineering; or other such things. The science or technology used may or may not be very thoroughly elaborated on.',
-      subGenres: 'Cyberpunk'
-    }
-  ];
-  
-  //users
-  let users = []
+mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
   // GET requests
-  //get list of all movies (json)
-  app.get('/movies', (req, res) => {
-    res.json(movies);
-  });
   //welcome page
   app.get('/', (req, res) => {
     res.send('Welcome to my movie API! (myFlix app)');
   });
   //express.static (to get the documentation file)
   app.use(express.static('public'));
+
+
+
+  //get list of all movies (json)
+  app.get('/movies', (req, res) => {
+    Movies.find().then(movies => res.json(movies));
+  });
+
+ /* // Get all users
+app.get('/users', (req, res) => {
+  Users.find()
+    .then((users) => {
+      res.status(201).json(users);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});*/
   
   //get data about a single movie (by title)
   app.get('/movies/:title', (req, res) => {
-    res.json(movies.find((movie) =>
-      { return movie.title === req.params.title }));
+    Movies.findOne({title: req.params.title})
+    .then((movie) => {
+      res.json(movie)
+  })
+  .catch((err)=>{
+    console.error(err);
+    res.status(500).send('Error: ' + err);
   });
+})
+
 
   //get data about a genre (by genre name)
-  app.get('/genres/:name', (req, res) => {
-    res.json(genres.find((genre) =>
-      { return genre.name === req.params.name }));
+  app.get('/movies/genre/:name', (req, res) => {
+    Movies.findOne({'Genre.Name': req.params.name })
+    .then((genre) => {
+      res.json(genre)
+  })
+  .catch((err)=>{
+    console.error(err);
+    res.status(500).send('Error: ' + err);
   });
+});
 
   //get data about a director (by name)
-  app.get('/directors/:name', (req, res) => {
-    res.json(directors.find((director) =>
-      { return director.name === req.params.name }));
+  app.get('/movies/director/:name', (req, res) => {
+    Movies.findOne({'Director.Name': req.params.name })
+    .then((genre) => {
+      res.json(genre)
+  })
+  .catch((err)=>{
+    console.error(err);
+    res.status(500).send('Error: ' + err);
   });
+});
   //get requests finished
 
+
   //post and put requests
-  //allow users to register
-  app.post('/users/new', (req, res) => {
-    let newUser = req.body;
-    if (!newUser.username || !newUser.email) {
-      const message = 'The following are required fields: "username", "email", and "favorites"';
-      res.status(400).send(message)}
-    
-    //to check : not sure if conditional for lacking "favorites" field needs to be added 
-    else {
-      newUser.id = uuid.v4();
-      users.push(newUser);
-      res.status(201).send(newUser);
+  //Add a user
+/* We’ll expect JSON in this format
+{
+  ID: Integer,
+  Username: String,
+  Password: String,
+  Email: String,
+  Birthday: Date
+}*/
+app.post('/users', (req, res) => {
+  Users.findOne({ Username: req.body.Username })
+    .then((user) => {
+      if (user) {
+        return res.status(400).send(req.body.Username + 'already exists');
+      } else {
+        Users
+          .create({
+            Username: req.body.Username,
+            Password: req.body.Password,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+          })
+          .then((user) =>{res.status(201).json(user) })
+        .catch((error) => {
+          console.error(error);
+          res.status(500).send('Error: ' + error);
+        })
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
+    });
+});
+
+  // Update a user's info, by username 
+  /* We’ll expect JSON in this format
+{
+  Username: String,(required)
+  Password: String,(required)
+  Email: String,(required)
+  Birthday: Date
+}*/
+
+app.put('/users/:Username', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, 
+{ $set:
+    {
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    }
+  },
+  { new: true }, // This line makes sure that the updated document is returned
+  (err, updatedUser) => {
+    if(err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
     }
   });
-  //update user info (username)
-  app.put('/users/:username/:newusername', (req, res) => {
-  let user = users.find((user) => { return user.username === req.params.username });
-  if (user) {
-    //replace the name with the new one
-    user.username = req.params.newusername 
-    res.status(201).send('User ' + req.params.username + ' was replaced with the following username: ' + req.params.newusername);
-  } else {
-    res.status(404).send('User ' + req.params.username + ' was not found.');
-  }
 });
-  //add a movie to a favourite list 
-app.put('/users/:username/favorites/:title', (req, res) => {
-  let user = users.find((user) => { return user.username === req.params.username });
-  let movie = movies.find((movie) => { return movie.title === req.params.title });
-  let favorites = user.favorites;
-  
-  if (movie && !favorites.includes(movie)) {
-    user.favorites.push(movie);
-    res.status(201).send(req.params.title + ' was added to your list of favourite movies');
-  } else {
-    res.status(404).send(req.params.title + ' was not found in the list of movies');
-  }
-}); //post and put requests finished
+
+// Add a movie to a user's list of favorites
+app.post('/users/:Username/movies/:MovieID', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
+     $push: { FavoriteMovies: req.params.MovieID }
+   },
+   { new: true }, // This line makes sure that the updated document is returned
+  (err, updatedUser) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
+  });
+});
+
+ //post and put requests finished
 
 
   //delete requests 
   //remove movie from a favourite list
-  app.delete('/users/:username/favorites/:title', (req, res) => {
-    let user = users.find((user) => { return user.name === req.params.username });
-    let movie = movies.find((movie) => { return movie.title === req.params.title });
-    let favorites = users.favorites 
-    if (favorites.includes(movie)) {
-      //to check - remove the movie title into the list of favourites 
-      user.favorites.remove(movie);
-      res.status(201).send(req.params.title + ' was removed from your list of favourite movies');
-    } else {
-      res.status(404).send(req.params.title + ' was not found in your list of favourite movies');
-    }
+  app.delete('/users/:Username/movies/:MovieID', (req, res) => {
+    Users.findOneAndUpdate({ Username: req.params.Username }, {
+       $pull: { FavoriteMovies: req.params.MovieID }
+     },
+     { new: true }, // This line makes sure that the updated document is returned
+    (err, updatedUser) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      } else {
+        res.json(updatedUser);
+      }
+    });
   });
-  //de-register user
-  app.delete('/users/:username', (req, res) => {
-  let user = users.find((user) => { return user.username === req.params.username });
-  if (user) {
-    users = users.filter((obj) => { return obj.username !== req.params.username });
-    res.status(201).send('User ' + req.params.username + ' with email ' + user.email + ' was deleted.');
-  }
+
+  // Delete a user by username
+app.delete('/users/:Username', (req, res) => {
+  Users.findOneAndRemove({ Username: req.params.Username })
+    .then((user) => {
+      if (!user) {
+        res.status(400).send(req.params.Username + ' was not found');
+      } else {
+        res.status(200).send(req.params.Username + ' was deleted.');
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
 
   //error handling
