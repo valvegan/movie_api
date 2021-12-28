@@ -140,7 +140,7 @@ app.post('/users', (req, res) => {
   Birthday: Date
 }*/
 
-app.put('/users/:Username', (req, res) => {
+app.put('/users/:username', (req, res) => {
   Users.findOneAndUpdate({ username: req.params.username }, 
 { $set:
     {
