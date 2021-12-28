@@ -9,19 +9,27 @@ let movieSchema = mongoose.Schema({
     },
     Director: {
       Name: String,
-      Bio: String
+      Bio: String,
+      Birth: String,
+      Death: String,
     },
-    Actors: [String],
+    Actors: [{
+        Name: String,
+        Bio: String,
+        Birth: String,
+        Death: String,
+        Movies: [String]
+    }],
     ImagePath: String,
     Featured: Boolean
   });
   
   let userSchema = mongoose.Schema({
-    Username: {type: String, required: true},
-    Password: {type: String, required: true},
-    Email: {type: String, required: true},
-    Birthday: Date,
-    FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
+    username: {type: String, required: true},
+    password: {type: String, required: true},
+    email: {type: String, required: true},
+    birthday: Date,
+    favoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
   });
   
   let Movie = mongoose.model('Movie', movieSchema);

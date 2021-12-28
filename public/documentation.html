@@ -54,7 +54,7 @@
         </tr>
         <tr>
             <td>Return data about a genre (description) by name/title</td>
-            <td>/movies/genres/[name]</td>
+            <td>/movies/genre/[name]</td>
             <td>GET</td>
             <td>:name</td>
             <td>None</td>
@@ -68,7 +68,7 @@
         </tr>
         <tr>
             <td>Return data about a director (bio, birth year, death year) by name</td>
-            <td>/directors/[name]</td>
+            <td>/movies/director/[name]</td>
             <td>GET</td>
             <td>:name</td>
             <td>None</td>
@@ -89,35 +89,41 @@
             <td>A JSON object holding data about the user, like so<br> 
             <small> {<br>
                     <b>username:</b> 'valentina',<br>
-                        <b>e-mail:</b> 'valentinavaccari@hotmail.com',<br>
-                                        <b>favorites:</b> [],<br>
+                    <b>password:</b> 'hey',<br>
+                    <b>email:</b> 'valentinavaccari@hotmail.com',<br>
+                    <b>Birthday:</b> '2001-08-05T00:00:00Z',
+                        
                 }</small>
             </td>
             <td>A JSON object holding the data entered by the user, plus the user's ID</td>
         </tr>
         <tr>
             <td>Allow users to update their user info (username)</td>
-            <td>/users/[username]/[New-username]</td>
+            <td>/users/[username]</td>
             <td>PUT</td>
-            <td>:usernasme/:newusername</td>
-            <td>none</td>
-            <td>A text message indicating that the new username was successfully updated
-                </td>
+            <td>:username</td>
+            <td>A JSON object holding data about the user (with one or multiple entries that need updating), like so<br> 
+                <small> {<br>
+                        <b>username:</b> 'val',<br>
+                        <b>password:</b> 'hey',<br>
+                            
+                    }</small></td>
+                    <td>A JSON object holding the full data about the updated user</td>
         </tr>
         <tr>
             <td>Allow users to add a movie to their list of favorites (showing only a text that a movie has been added)</td>
-            <td>/users/[username]/[favorites]/[new-movietitle]</td>
+            <td>/users/[username]/favoriteMovies/[MovieID]'</td>
             <td>POST</td>
-            <td>:username/favorites/:title</td>
-            <td>none</td>
+            <td>:username/:MovieID</td>
+            <td>none<br> MovieID needs to be the numeric string from the database</td>
             <td>A text message indicating whether the movie was successfully added to the list of favourites
                 </td>
         </tr>
         <tr>
             <td>Allow users to remove a movie from their list of favorites (showing only a text that a movie has been removed)</td>
-            <td>/users/[username]/[favourites]/[movietitle-to-remove]</td>
+            <td>/users/[username]/favoriteMovies/[MovieID]</td>
             <td>DELETE</td>
-            <td>:username/favorites/:title</td>
+            <td>:username/:MovieID</td>
             <td>none</td>
             <td>A text message indicating whether the movie was successfully removed from the list of favourites</td>
         </tr>
