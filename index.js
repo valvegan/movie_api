@@ -94,7 +94,7 @@ mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, 
   Birthday: Date
 }*/
 app.post('/users', (req, res) => {
-  Users.findOne({ Username: req.body.username })
+  Users.findOne({ username: req.body.username })
     .then((user) => {
       if (user) {
         return res.status(400).send(req.body.username + 'already exists');
