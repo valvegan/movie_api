@@ -94,17 +94,17 @@ mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, 
   Birthday: Date
 }*/
 app.post('/users', (req, res) => {
-  Users.findOne({ Username: req.body.Username })
+  Users.findOne({ Username: req.body.username })
     .then((user) => {
       if (user) {
-        return res.status(400).send(req.body.Username + 'already exists');
+        return res.status(400).send(req.body.username + 'already exists');
       } else {
         Users
           .create({
-            username: req.body.Username,
-            password: req.body.Password,
-            email: req.body.Email,
-            Birthday: req.body.Birthday
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email,
+            birthday: req.body.birthday
           })
           .then((user) =>{res.status(201).json(user) })
         .catch((error) => {
@@ -128,14 +128,14 @@ app.post('/users', (req, res) => {
   Birthday: Date
 }*/
 
-app.put('/users/:Username', (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.Username }, 
+app.put('/users/:username', (req, res) => {
+  Users.findOneAndUpdate({ username: req.params.Username }, 
 { $set:
     {
-      Username: req.body.Username,
-      Password: req.body.Password,
-      Email: req.body.Email,
-      Birthday: req.body.Birthday
+      username: req.body.Username,
+      password: req.body.Password,
+      email: req.body.Email,
+      birthday: req.body.Birthday
     }
   },
   { new: true }, // This line makes sure that the updated document is returned
