@@ -84,7 +84,7 @@ let movies = [
   //genres
   let genres = [
     {
-      name: 'Science fiction (scifi)',
+      name: 'Science Fiction',
       description: 'Science fiction (once known as scientific romance) is similar to fantasy, except stories in this genre use scientific understanding to explain the universe that it takes place in. It generally includes or is centered on the presumed effects or ramifications of computers or machines; travel through space, time or alternate universes; alien life-forms; genetic engineering; or other such things. The science or technology used may or may not be very thoroughly elaborated on.',
       subGenres: 'Cyberpunk'
     }
@@ -134,18 +134,24 @@ let movies = [
     
     //to check : not sure if conditional for lacking "favorites" field needs to be added 
     else {
-      newUser.id = uuid.v4();
+      newUser.id = uuid.v4()
+      newUser.favorites = [];
       users.push(newUser);
       res.status(201).send(newUser);
     }
   });
+
+  //get all users
+  app.get('/users'), (req, res) => {
+    res.json(users);
+  }
   //update user info (username)
   app.put('/users/:username', (req, res) => {
   let user = users.find((user) => { return user.username === req.params.username });
   if (user) {
     //replace the name with the new one
-    user.username = req.params.newusername 
-    res.status(201).send('User ' + req.params.username + ' was replaced with the following username: ' + req.params.newusername);
+    user.username = req.body.username 
+    res.status(201).send('User ' + req.params.username + ' was replaced with the following username: ' + req.body.newusername);
   } else {
     res.status(404).send('User ' + req.params.username + ' was not found.');
   }
@@ -168,12 +174,12 @@ app.put('/users/:username/favorites/:title', (req, res) => {
   //delete requests 
   //remove movie from a favourite list
   app.delete('/users/:username/favorites/:title', (req, res) => {
-    let user = users.find((user) => { return user.name === req.params.username });
+    let user = users.find((user) => { return user.username === req.params.username });
     let movie = movies.find((movie) => { return movie.title === req.params.title });
-    let favorites = user.favorites 
-    if (favorites.includes(movie)) {
-      //to check - remove the movie title into the list of favourites 
-      user.favorites.remove(movie);
+    let favorites = user.favorites;
+    if (user && favorites.includes(movie)) {
+     
+      favorites.filter((obj) => { return obj.title !== req.params.title });
       res.status(201).send(req.params.title + ' was removed from your list of favourite movies');
     } else {
       res.status(404).send(req.params.title + ' was not found in your list of favourite movies');
