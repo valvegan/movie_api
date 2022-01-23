@@ -2,7 +2,6 @@ const express = require('express'),
   bodyParser = require('body-parser'),
   morgan = require('morgan');
 const res = require('express/lib/response');
-  uuid = require('uuid');
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
