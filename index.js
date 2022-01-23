@@ -186,7 +186,7 @@ app.post('/users/:username/favoriteMovies/:MovieID', (req, res) => {
 
   // Delete a user by username
 app.delete('/users/:username', (req, res) => {
-  Users.findOneAndRemove({ username: req.params.Username })
+  Users.findOneAndRemove({ username: req.params.username })
     .then((user) => {
       if (!user) {
         res.status(400).send(req.params.username + ' was not found');
