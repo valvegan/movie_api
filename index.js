@@ -126,7 +126,7 @@ let movies = [
 
   //post and put requests
   //allow users to register
-  app.post('/users/new', (req, res) => {
+  app.post('/users', (req, res) => {
     let newUser = req.body;
     if (!newUser.username || !newUser.email) {
       const message = 'The following are required fields: "username", "email", and "favorites"';
@@ -140,7 +140,7 @@ let movies = [
     }
   });
   //update user info (username)
-  app.put('/users/:username/:newusername', (req, res) => {
+  app.put('/users/:username', (req, res) => {
   let user = users.find((user) => { return user.username === req.params.username });
   if (user) {
     //replace the name with the new one
@@ -170,7 +170,7 @@ app.put('/users/:username/favorites/:title', (req, res) => {
   app.delete('/users/:username/favorites/:title', (req, res) => {
     let user = users.find((user) => { return user.name === req.params.username });
     let movie = movies.find((movie) => { return movie.title === req.params.title });
-    let favorites = users.favorites 
+    let favorites = user.favorites 
     if (favorites.includes(movie)) {
       //to check - remove the movie title into the list of favourites 
       user.favorites.remove(movie);
