@@ -60,20 +60,7 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
         res.status(500).send('Error: ' + error);
       });
   });
-  
 
-  // Get all users
-/*app.get('/users', (req, res) => {
-  Users.find()
-    .then((users) => {
-      res.status(201).json(users);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-});*/
-  
   //get data about a single movie (by title)
   app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({Title: req.params.title})
