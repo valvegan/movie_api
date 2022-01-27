@@ -99,7 +99,6 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
 });
   //get requests finished
 
-
   //post and put requests
   //Add a user
 app.post('/users', 
