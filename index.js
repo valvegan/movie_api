@@ -14,7 +14,7 @@ const cors = require('cors');
 //app.use(cors());
 //if only localhost and testsite.com are allowed domains:
 
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'https://my-flix-api-2022.herokuapp.com'];
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
 
 app.use(cors({
   origin: (origin, callback) => {
