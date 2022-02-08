@@ -113,10 +113,10 @@ app.post('/users',
   //or use .isLength({min: 5}) which means
   //minimum value of 5 characters are only allowed
   [
-    check('username', 'Username is required').isLength({min: 5}),
-    check('username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
-    check('password', 'Password is required').not().isEmpty(),
-    check('email', 'Email does not appear to be valid').isEmail()
+    check('username', 'username is required').isLength({min: 5}),
+    check('username', 'username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('password', 'password is required').not().isEmpty(),
+    check('email', 'email does not appear to be valid').isEmail()
   ],
   (req, res) => {
     // check the validation object for errors
