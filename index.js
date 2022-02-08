@@ -10,6 +10,10 @@ app.use(bodyParser.json());
 const { check, validationResult } = require('express-validator');
 
 const cors = require('cors');
+//allow cors for ALL domains
+app.use(cors());
+//if only localhost and testsite.com are allowed domains:
+/*
 let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
 
 app.use(cors({
@@ -22,6 +26,7 @@ app.use(cors({
     return callback(null, true);
   }
 }));
+*/
 
 
 let auth = require('./auth')(app);
