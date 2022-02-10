@@ -42,8 +42,8 @@ let auth = require('./auth')(app);
 app.use(morgan('common'));
 
 
-mongoose.connect('mongodb+srv://valvegan:Snowblind1@cluster-valentinav.zoo2x.mongodb.net/myFlixDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
-//mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect('mongodb+srv://valvegan:Snowblind1@cluster-valentinav.zoo2x.mongodb.net/myFlixDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
   // GET requests
   //welcome page
