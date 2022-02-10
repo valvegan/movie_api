@@ -30,7 +30,7 @@ let movieSchema = mongoose.Schema({
     password: {type: String, required: true},
     email: {type: String, required: true},
     birthday: Date,
-    favoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }]
+    favoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'movie' }]
   });
 
   userSchema.statics.hashPassword = (password) => {
@@ -41,8 +41,8 @@ let movieSchema = mongoose.Schema({
     return bcrypt.compareSync(password, this.Password);
   };  
   
-  let Movie = mongoose.model('Movie', movieSchema);
-  let User = mongoose.model('User', userSchema);
+  let Movie = mongoose.model('movie', movieSchema);
+  let User = mongoose.model('user', userSchema);
   
   module.exports.Movie = Movie;
   module.exports.User = User;
