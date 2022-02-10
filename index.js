@@ -19,12 +19,12 @@ const app = express();
 
 const cors = require('cors');
 //allow requests from all domains
-//app.use(cors());
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'https://my-flix-api-2022.herokuapp.com/'];
+/*let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'https://my-flix-api-2022.herokuapp.com/'];
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -36,7 +36,7 @@ app.use(cors({
     return callback(null, true);
   }
 }));
-
+*/
 let auth = require('./auth')(app);
 
 app.use(morgan('common'));
