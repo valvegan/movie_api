@@ -5,16 +5,17 @@ const express = require('express'),
 //mongoose
 const mongoose = require('mongoose');
 const Models = require('./models.js');
+
 const Movies = Models.Movie;
 const Users = Models.User;
 
-const res = require('express/lib/response');
-const app = express();
 const passport = require('passport');
 require('./passport');
 
-
 const { check, validationResult } = require('express-validator');
+
+const res = require('express/lib/response');
+const app = express();
 
 const cors = require('cors');
 app.use(cors());
