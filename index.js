@@ -17,6 +17,8 @@ const { check, validationResult } = require('express-validator');
 const res = require('express/lib/response');
 const app = express();
 
+const port = process.env.PORT || 8080;
+
 const cors = require('cors');
 //allow requests from all domains
 app.use(cors());
@@ -241,7 +243,7 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
   });
   
   // listen for requests
-  const port = process.env.PORT || 8080;
+
 app.listen(port, '0.0.0.0',() => {
  console.log('Listening on Port ' + port);
 });
