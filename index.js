@@ -58,16 +58,19 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
 
 
   //get list of all movies (json)
-  app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+  app.get('/movies', 
+  //passport.authenticate('jwt', { session: false }), 
+  function (req, res) {
     Movies.find()
-      .then((movies) => {
+      .then(function (movies) {
         res.status(201).json(movies);
       })
-      .catch((error) => {
+      .catch(function (error) {
         console.error(error);
         res.status(500).send('Error: ' + error);
       });
   });
+  
 
   //get data about a single movie (by title)
   app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
