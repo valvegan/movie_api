@@ -59,7 +59,7 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
 
   //get list of all movies (json)
   app.get('/movies', 
-  //passport.authenticate('jwt', { session: false }), 
+  passport.authenticate('jwt', { session: false }), 
   function (req, res) {
     Movies.find()
       .then(function (movies) {
