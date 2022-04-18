@@ -108,6 +108,35 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
     res.status(500).send('Error: ' + err);
   });
 });
+
+//Get a user by username
+app.get('/users/:username', (req, res) => {
+  Users.findOne({ username: req.params.username })
+    .then ((user) => {
+      res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+
+//Get all users
+app.get('/users', (req, res) => {
+  Users.find()
+    .then((users) => {
+      res.status(201).json(users);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+
+
+
   //get requests finished
 
   //post and put requests
@@ -239,7 +268,11 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
     });
 });
 
+
+
   //error handling
+
+
   app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
