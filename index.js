@@ -26,8 +26,11 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-let allowedOrigins = ['http://localhost:8080', 'https://my-flix-api-2022.herokuapp.com/', 'https://valentina-my-flix-client.netlify.app/', 
-'http://localhost:1234/'];
+let allowedOrigins = ['http://localhost:8080', 
+'https://my-flix-api-2022.herokuapp.com/', 
+
+'https://valentina-my-flix-client.netlify.app/', 
+];
 
 app.use(cors({
   origin: (origin, callback) => {
