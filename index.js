@@ -1,14 +1,17 @@
+//load express (framework)
 const express = require("express"),
+  //import bodyparser
   bodyParser = require("body-parser"),
+  //import morgan
   morgan = require("morgan");
 
-//mongoose
+//mongoose, models.js
 const mongoose = require("mongoose");
 const Models = require("./models.js");
-
 const Movies = Models.Movie;
 const Users = Models.User;
 
+// Require passport module & import passport.js file
 const passport = require("passport");
 require("./passport");
 
@@ -23,15 +26,16 @@ const cors = require("cors");
 //allow requests from all domains
 app.use(cors());
 
+//bodyparser to parse http body requests
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 /*let allowedOrigins = ['http://localhost:8080', 
 'https://my-flix-api-2022.herokuapp.com/', 
-
 'https://valentina-my-flix-client.netlify.app/', 
 ];*/
 
+//Cross-Origin Resource Sharing
 app.use(
   cors({
     origin: "*",
@@ -47,25 +51,43 @@ app.use(
   })
 );
 
+//import auth.js
 let auth = require("./auth")(app);
 
+/**
+ * logging with morgan
+ */
 app.use(morgan("common"));
 
-//mongoose.connect('mongodb+srv://valvegan:Snowblind1@cluster-valentinav.zoo2x.mongodb.net/myFlixDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+/**
+ * connecting to mongoDB Atlast
+ */
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-// GET requests
-//welcome page
+/*
+ * Start of Enpoints
+ */
+
+/**
+ * GET: welcome page
+ * @returns welcome text
+ * @requires express
+ */
 app.get("/", (req, res) => {
   res.send("Welcome to my movie API! (myFlix app)");
 });
 //express.static (to get the documentation file)
 app.use(express.static("public"));
 
-//get list of all movies (json)
+/**
+ * GET: list of ALL movies
+ * Request body: Bearer token
+ * @returns array of movie objects
+ * @requires passport
+ */
 app.get(
   "/movies",
   passport.authenticate("jwt", { session: false }),
@@ -81,6 +103,13 @@ app.get(
   }
 );
 
+/**
+ * GET: data about a single movie, by title
+ * Request body: Bearer token
+ * @param title
+ * @returns movie object
+ * @requires passport
+ */
 //get data about a single movie (by title)
 app.get(
   "/movies/:title",
@@ -97,7 +126,13 @@ app.get(
   }
 );
 
-//get data about a genre (by genre name)
+/**
+ * GET: data about a genre by name
+ * Request body: Bearer token
+ * @param name
+ * @returns genre object
+ * @requires passport
+ */
 app.get(
   "/genres/:name",
   passport.authenticate("jwt", { session: false }),
@@ -113,7 +148,13 @@ app.get(
   }
 );
 
-//get data about a director (by name)
+/**
+ * GET: data about a director by name
+ * Request body: Bearer token
+ * @param name
+ * @returns director object
+ * @requires passport
+ */
 app.get(
   "/directors/:name",
   passport.authenticate("jwt", { session: false }),
@@ -129,7 +170,13 @@ app.get(
   }
 );
 
-//Get a user by username
+/**
+ * GET: data on a single user by username
+ * Request body: Bearer token
+ * @param username
+ * @returns user object
+ * @requires passport
+ */
 app.get(
   "/users/:username",
   passport.authenticate("jwt", { session: false }),
@@ -145,9 +192,12 @@ app.get(
   }
 );
 
-
-
-//Get all users
+/**
+ * GET: all users
+ * Request body: Bearer token
+ * @returns array of users
+ * @requires passport
+ */
 app.get(
   "/users",
   passport.authenticate("jwt", { session: false }),
@@ -163,7 +213,13 @@ app.get(
   }
 );
 
-//get a user's favorite movies
+/**
+ * GET: a user's favorite movies
+ * Request body: Bearer token
+ * @param username
+ * @returns array of favorite movies (id's)
+ * @requires passport
+ */
 app.get(
   "/users/:username/favoriteMovies",
   passport.authenticate("jwt", { session: false }),
@@ -185,17 +241,23 @@ app.get(
   }
 );
 
-//get requests finished
+/**
+ * get requests finished
+ */
 
-//post and put requests
-//Add a user
+/**
+ * post and put requests
+ */
+/**
+ * POST: user registration
+ * Request body: Bearer token, JSON with user info (username, password, email address, and optional birthday)
+ * @returns user object
+ */
 app.post(
   "/users",
-  // Validation logic here for request
   //you can either use a chain of methods like .not().isEmpty()
   //which means "opposite of isEmpty" in plain english "is not empty"
-  //or use .isLength({min: 5}) which means
-  //minimum value of 5 characters are only allowed
+  //or use .isLength({min: 5}) which means minimum value of 5 characters are only allowed
   [
     check("username", "Username is required").isLength({ min: 3 }),
     check(
@@ -241,7 +303,46 @@ app.post(
   }
 );
 
-// Update a user's info, by username
+/**
+ * POST: Add a movie to a user's list of favorite
+ * Request body: Bearer token
+ * @param username
+ * @param movieID
+ * @returns user object
+ * @requires passport
+ */
+app.post(
+  "/users/:username/favoriteMovies/:MovieID",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Users.findOneAndUpdate(
+      { username: req.params.username },
+      {
+        $push: { favoriteMovies: req.params.MovieID },
+      },
+      { new: true }, // This line makes sure that the updated document is returned
+      (err, updatedUser) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send("Error: " + err);
+        } else {
+          res.json(updatedUser);
+        }
+      }
+    );
+  }
+);
+
+/**
+ * Put requests
+ */
+/**
+ * PUT: update profile information
+ * Request body: Bearer token, JSON body with new information for the user
+ * @param username
+ * @returns user object with updates
+ * @requires passport
+ */
 /* We’ll expect JSON in this format
 {
   Username: String,(required)
@@ -249,7 +350,6 @@ app.post(
   Email: String,(required)
   Birthday: Date
 }*/
-
 app.put(
   "/users/:username",
   passport.authenticate("jwt", { session: false }),
@@ -277,32 +377,18 @@ app.put(
   }
 );
 
-// Add a movie to a user's list of favorites
-app.post(
-  "/users/:username/favoriteMovies/:MovieID",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    Users.findOneAndUpdate(
-      { username: req.params.username },
-      {
-        $push: { favoriteMovies: req.params.MovieID },
-      },
-      { new: true }, // This line makes sure that the updated document is returned
-      (err, updatedUser) => {
-        if (err) {
-          console.error(err);
-          res.status(500).send("Error: " + err);
-        } else {
-          res.json(updatedUser);
-        }
-      }
-    );
-  }
-);
-//post and put requests finished
+/**
+ * delete requests
+ */
 
-//delete requests
-//remove movie from a favourite list
+/**
+ * DELETE: remove movie from a favourite list
+ * Request body: Bearer token
+ * @param username
+ * @param movieID
+ * @returns user object
+ * @requires passport
+ */
 app.delete(
   "/users/:username/favoriteMovies/:MovieID",
   passport.authenticate("jwt", { session: false }),
@@ -325,7 +411,13 @@ app.delete(
   }
 );
 
-// Delete a user by username
+/**
+ * DELETE: Delete a user by username (deregister)
+ * Request body: Bearer token
+ * @param username
+ * @returns success message
+ * @requires passport
+ */
 app.delete(
   "/users/:username",
   passport.authenticate("jwt", { session: false }),
@@ -345,15 +437,21 @@ app.delete(
   }
 );
 
-//error handling
+/**
+ * end of endpoints
+ */
 
+/**
+ * error handling
+ */
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
 });
 
-// listen for requests
-
+/**
+ * listen for requests
+ */
 app.listen(port, "0.0.0.0", () => {
   console.log("Listening on Port " + port);
 });
