@@ -12,6 +12,14 @@ The API is deployed to Heroku at [this link](https://my-flix-api-2022.herokuapp.
 ## Documentation
 Open [this link](https://my-flix-api-2022.herokuapp.com/documentation.html) to see a documentation of the endpoints
 
+## JSDoc Documentation
+- To install JSDoc
+>npm install -g jsdoc
+- to generate documentation for a file:
+>jsdoc yourFile.js
+- To generate documentation for all the files in a certain directory:
+>jsdoc yourDirectory
+
 ## User Stories
 - As a user, I want to be able to receive information on movies, directors, and genres so that I can learn more about movies I’ve watched or am interested in.
 - As a user, I want to be able to create a profile so I can save data about my favorite movies.
